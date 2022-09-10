@@ -40,7 +40,7 @@ public class AccountsController {
 	}
 	
 	@GetMapping("/myCustomerDetails/{customerId}")
-	public CustomerDetails myCustomerDetails(@PathVariable("customerId") int customerId) {
+	public @ResponseBody CustomerDetails myCustomerDetails(@PathVariable("customerId") int customerId) {
 		Accounts accounts = accountsRepository.findByCustomerId(customerId);
 		List<Card> card = this.restTemplate.getForObject("http://card/myCards/"+customerId, List.class);
 		//List<Loans> loans = this.restTemplate.getForObject("http://loans/myCards/"+customerId, List.class);

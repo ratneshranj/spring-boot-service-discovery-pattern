@@ -1,0 +1,66 @@
+version: "3.8"
+
+services:
+  eureka:
+    image: 241174/bank-eureka-service-registry:latest
+    mem_limit: 2048m
+    ports:
+      - "8761:8761"
+    networks:
+     - localbank-network
+     
+  account:
+    image: 241174/bank-account-service-registry:latest
+    mem_limit: 2048m
+    ports:
+      - "8080:8080"
+    networks:
+      - localbank-network
+    depends_on:
+       - eureka
+       - card
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 3
+        window: 120s
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+  loans:
+    image: 241174/bank-loans-service-registry:latest
+    mem_limit: 2048m
+    ports:
+      - "8082:8082"
+    networks:
+      - localbank-network
+    depends_on:
+       - eureka
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 3
+        window: 120s
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+  card:
+    image: 241174/bank-card-service-registry:latest
+    mem_limit: 2048m
+    ports:
+      - "8081:8081"
+    networks:
+      - localbank-network
+    
+    depends_on:
+       - eureka
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 3
+        window: 120s
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+networks:
+  localbank-network:

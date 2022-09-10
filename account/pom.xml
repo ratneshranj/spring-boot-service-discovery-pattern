@@ -77,9 +77,6 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
-					<image>
-						<name>bank/${project.artifactId}</name>
-					</image>
 				</configuration>
 			</plugin>
 		</plugins>
